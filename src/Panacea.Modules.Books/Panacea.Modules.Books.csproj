@@ -32,26 +32,46 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Panacea.Controls, Version=0.0.11.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Panacea.Controls.0.0.11-beta20190513-1237-gdfddf1a\lib\net462\Panacea.Controls.dll</HintPath>
+    <Reference Include="Panacea.ContentControls, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Panacea.ContentControls.2.0.0\lib\net462\Panacea.ContentControls.dll</HintPath>
     </Reference>
-    <Reference Include="Panacea.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Panacea.Core.4.0.0\lib\net462\Panacea.Core.dll</HintPath>
+    <Reference Include="Panacea.Controls, Version=0.0.27.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Panacea.Controls.0.0.27-beta20190524-1517-g8a25a53\lib\net462\Panacea.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="Panacea.Models, Version=0.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Panacea.Models.0.0.2\lib\net462\Panacea.Models.dll</HintPath>
+    <Reference Include="Panacea.Core, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Panacea.Core.6.0.0\lib\net462\Panacea.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Panacea.Models, Version=0.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Panacea.Models.0.0.4\lib\net462\Panacea.Models.dll</HintPath>
     </Reference>
     <Reference Include="Panacea.Modularity, Version=0.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Panacea.Modularity.0.0.2\lib\net462\Panacea.Modularity.dll</HintPath>
     </Reference>
-    <Reference Include="Panacea.Modularity.UiManager, Version=7.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Panacea.Modularity.UiManager.7.0.1\lib\net462\Panacea.Modularity.UiManager.dll</HintPath>
+    <Reference Include="Panacea.Modularity.Billing, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Panacea.Modularity.Billing.2.1.0\lib\net462\Panacea.Modularity.Billing.dll</HintPath>
     </Reference>
-    <Reference Include="Panacea.Multilinguality, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Panacea.Multilinguality.0.1.2\lib\net462\Panacea.Multilinguality.dll</HintPath>
+    <Reference Include="Panacea.Modularity.Media, Version=3.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Panacea.Modularity.Media.3.0.3\lib\net462\Panacea.Modularity.Media.dll</HintPath>
+    </Reference>
+    <Reference Include="Panacea.Modularity.MediaPlayerContainer, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Panacea.Modularity.MediaPlayerContainer.4.0.2\lib\net462\Panacea.Modularity.MediaPlayerContainer.dll</HintPath>
+    </Reference>
+    <Reference Include="Panacea.Modularity.UiManager, Version=9.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Panacea.Modularity.UiManager.9.0.1\lib\net462\Panacea.Modularity.UiManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Panacea.Modularity.WebBrowsing, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Panacea.Modularity.WebBrowsing.3.0.0\lib\net462\Panacea.Modularity.WebBrowsing.dll</HintPath>
+    </Reference>
+    <Reference Include="Panacea.Multilinguality, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Panacea.Multilinguality.1.0.0\lib\net462\Panacea.Multilinguality.dll</HintPath>
+    </Reference>
+    <Reference Include="Panacea.Mvvm, Version=0.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Panacea.Mvvm.0.0.1\lib\net462\Panacea.Mvvm.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -67,6 +87,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BooksPlugin.cs" />
+    <Compile Include="BooksProvider.cs" />
+    <Compile Include="BoolToColorConverter.cs" />
+    <Compile Include="Models\Book.cs" />
+    <Compile Include="Models\BookCategory.cs" />
+    <Compile Include="Models\BooksGetFullResponse.cs" />
+    <Compile Include="Models\DxTile.cs" />
+    <Compile Include="Models\InteropItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -80,6 +107,18 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\AudioChaptersPresenterViewModel.cs" />
+    <Compile Include="ViewModels\BookListViewModel.cs" />
+    <Compile Include="ViewModels\BookMiniPresenterViewModel.cs" />
+    <Compile Include="Views\AudioChaptersPresenter.xaml.cs">
+      <DependentUpon>AudioChaptersPresenter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BookList.xaml.cs">
+      <DependentUpon>BookList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BookMiniPresenter.xaml.cs">
+      <DependentUpon>BookMiniPresenter.xaml</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -89,6 +128,20 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\AudioChaptersPresenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BookList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BookMiniPresenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

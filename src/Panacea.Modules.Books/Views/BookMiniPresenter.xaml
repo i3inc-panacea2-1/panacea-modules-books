@@ -1,0 +1,192 @@
+﻿<UserControl 
+    x:Class="Panacea.Modules.Books.Views.BookMiniPresenter"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"         
+    xmlns:viewModels="clr-namespace:Panacea.Modules.Books.ViewModels"
+    xmlns:panaceaCtrl="clr-namespace:Panacea.Controls;assembly=Panacea.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:Panacea.Modules.Books.Views"
+    xmlns:multilinguality="clr-namespace:Panacea.Multilinguality;assembly=Panacea.Multilinguality"
+    mc:Ignorable="d" 
+    d:DesignHeight="450" d:DesignWidth="800">
+    
+    <d:UserControl.DataContext>
+        <x:Type Type="viewModels:BookMiniPresenterViewModel" />
+    </d:UserControl.DataContext>
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+            <Style x:Key="Label" TargetType="TextBlock">
+                <Style.Setters>
+                    <Setter Property="Foreground" Value="#88000000" />
+                    <Setter Property="HorizontalAlignment" Value="Right" />
+                    <Setter Property="FontSize" Value="{DynamicResource FontSize-Normal}" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                </Style.Setters>
+            </Style>
+            <Style x:Key="Value" TargetType="TextBlock">
+                <Style.Setters>
+                    <Setter Property="HorizontalAlignment" Value="Left" />
+                    <Setter Property="FontSize" Value="{DynamicResource FontSize-Normal}" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="TextWrapping" Value="Wrap" />
+                    <Setter Property="Margin" Value="8,0,0,0" />
+                </Style.Setters>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Margin="10" VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Grid.Row="0"
+            Margin="8"
+            FontSize="{DynamicResource FontSize-Xxx-Large}"
+            Text="{Binding Book.Name}"
+            TextAlignment="Center"
+            TextWrapping="Wrap" />
+        <UniformGrid
+            Name="ugrid"
+            Grid.Row="1"
+            Columns="2">
+
+            <panaceaCtrl:CacheImage
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                ImageUrl="{Binding Book.ImgThumbnail.Image}" />
+
+
+            <Grid
+                Name="MiniPresenterGrid"
+                Margin="8"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Style="{StaticResource Label}"
+                    Text="{multilinguality:Translate 'Writer',
+                                                     'Books'}" />
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Style="{StaticResource Value}"
+                    Text="{Binding Book.Writer}" />
+
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Style="{StaticResource Label}"
+                    Text="{multilinguality:Translate 'Year',
+                                                     'Books'}" />
+
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Style="{StaticResource Value}"
+                    Text="{Binding Book.Year}" />
+
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Style="{StaticResource Label}"
+                    Text="{multilinguality:Translate 'ISBN',
+                                                     'Books'}" />
+
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Style="{StaticResource Value}"
+                    Text="{Binding Book.Isbn}" />
+
+                <TextBlock
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Style="{StaticResource Label}"
+                    Text="{multilinguality:Translate 'Language',
+                                                     'Books'}" />
+
+                <TextBlock
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Style="{StaticResource Value}"
+                    Text="{Binding Book.Language}" />
+
+            </Grid>
+        </UniformGrid>
+
+        <UniformGrid Grid.Row="2" Columns="1">
+            <Grid Margin="8" VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="80" MaxHeight="80" />
+
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Grid.Row="0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource Label}"
+                    Text="{multilinguality:Translate 'Description',
+                                                     'Books'}" />
+                <ScrollViewer
+                    Grid.Row="1"
+                    PanningMode="VerticalOnly"
+                    VerticalScrollBarVisibility="Auto">
+                    <TextBlock
+                        Margin="0,0,20,0"
+                        Style="{StaticResource Value}"
+                        Text="{Binding Book.Description}"
+                        TextWrapping="Wrap" />
+                </ScrollViewer>
+            </Grid>
+        </UniformGrid>
+        <DockPanel
+            Grid.Row="3"
+            HorizontalAlignment="Center"
+            LastChildFill="False">
+            <Button
+                Command="{Binding ReadBookCommand}"
+                Content="{multilinguality:Translate 'Read book',
+                                                    'Books'}"
+                FontSize="{DynamicResource FontSize-Normal}"
+                Style="{DynamicResource PrimaryButton}"
+                panaceaCtrl:Material.Icon="ic_library_books"
+                Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource BoolToVisibility}}" />
+            <Button
+                panaceaCtrl:Material.Icon="ic_voice_chat"
+                Command="{Binding ListenToBookCommand}"
+                Content="{multilinguality:Translate 'Listen to book',
+                                                    'Books'}"
+                FontSize="{DynamicResource FontSize-Normal}"
+                Style="{DynamicResource PrimaryButton}"
+                Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource BoolToVisibility}}" />
+            <Button
+                panaceaCtrl:Material.Icon="ic_web"
+                Command="{Binding GoToBookCommand}"
+                Content="{multilinguality:Translate 'Go to book',
+                                                    'Books'}"
+                FontSize="{DynamicResource FontSize-Normal}"
+                Style="{DynamicResource PrimaryButton}"
+                Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource BoolToVisibility}}" />
+
+        </DockPanel>
+    </Grid>
+</UserControl>
