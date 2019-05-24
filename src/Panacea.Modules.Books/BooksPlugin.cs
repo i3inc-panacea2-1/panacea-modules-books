@@ -89,14 +89,14 @@ namespace Panacea.Modules.Books
                 {
                     return;
                 }
-                if (book != null)
-                {
-                    //TODO: WS: _websocket.PopularNotify("Books", "Book", book.Id);
-                    var durl = book.DataUrl.FirstOrDefault(d => d?.DataType == "file");
-                    if (durl == null || string.IsNullOrEmpty(durl.Url)) return;
-                    var url = _core.HttpClient.RelativeToAbsoluteUri(durl.Url);
-                    OpenItem(book, url);
-                }
+            }
+            if (book != null)
+            {
+                //TODO: WS: _websocket.PopularNotify("Books", "Book", book.Id);
+                var durl = book.DataUrl.FirstOrDefault(d => d?.DataType == "file");
+                if (durl == null || string.IsNullOrEmpty(durl.Url)) return;
+                var url = _core.HttpClient.RelativeToAbsoluteUri(durl.Url);
+                OpenItem(book, url);
             }
         }
 
