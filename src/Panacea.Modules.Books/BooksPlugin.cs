@@ -20,7 +20,7 @@ using System.Windows;
 
 namespace Panacea.Modules.Books
 {
-    public class BooksPlugin : IPlugin //TODO: ,IHasFavorites in modularity?
+    public class BooksPlugin : ICallablePlugin //TODO: ,IHasFavorites in modularity?
     {
         readonly PanaceaServices _core;
         readonly BooksProvider _provider;
@@ -43,11 +43,6 @@ namespace Panacea.Modules.Books
 
         public Task EndInit()
         {
-            if (_core.TryGetUiManager(out IUiManager ui))
-            {
-                var bookListViewModel = new BookListViewModel(_core, this);
-                ui.Navigate(bookListViewModel);
-            }
             return Task.CompletedTask;
         }
 
@@ -165,5 +160,13 @@ namespace Panacea.Modules.Books
             return;
         }
 
+        public void Call()
+        {
+            if (_core.TryGetUiManager(out IUiManager ui))
+            {
+                var bookListViewModel = new BookListViewModel(_core, this);
+                ui.Navigate(bookListViewModel);
+            }
+        }
     }
 }
