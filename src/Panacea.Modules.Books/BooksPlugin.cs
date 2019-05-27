@@ -23,7 +23,7 @@ namespace Panacea.Modules.Books
 {
     public class BooksPlugin : ICallablePlugin //TODO: ,IHasFavorites in modularity?
     {
-        readonly Translator _translator;
+        readonly Translator _translator = new Translator("Books");
         readonly PanaceaServices _core;
         readonly BooksProvider _provider;
         public BooksProvider Provider
@@ -34,7 +34,6 @@ namespace Panacea.Modules.Books
         public BooksPlugin(PanaceaServices core)
         {
             _core = core;
-            _translator = new Translator("Books");
             _provider = new BooksProvider(core);
         }
         public List<ServerItem> Favorites { get; set; }
@@ -87,12 +86,11 @@ namespace Panacea.Modules.Books
 
         async public void ReadBook(Book book)
         {
-            if (_core.TryGetBilling(out IBillingManager _billing)) {
+            if (_core.TryGetBilling(out IBillingManager _billing))
+            {
                 if (!_billing.IsPluginFree("Books"))
                 {
-                    string msg = "This Book requires service.";
-                    //TODO TRANSLATOR: var t = _translator.Translate(msg);
-                    var s = await _billing.GetServiceForItemAsync(msg, "Books", book);
+                    var s = await _billing.GetServiceForItemAsync(_translator.Translate("This Book requires service."), "Books", book);
                     if (s == null)
                     {
                         return;
@@ -111,9 +109,11 @@ namespace Panacea.Modules.Books
 
         public void GoToBook(Book book)
         {
-            if(_core.TryGetWebBrowser(out IWebBrowserPlugin _webBrowser)){
+            if (_core.TryGetWebBrowser(out IWebBrowserPlugin _webBrowser))
+            {
                 _webBrowser.OpenUnmanaged(book.DataUrl.Where(du => du.DataType == "url").First().Url);
-            } else
+            }
+            else
             {
                 _core.Logger.Warn(this, "web browser not loaded");
             }
@@ -122,7 +122,7 @@ namespace Panacea.Modules.Books
         private BookMiniPresenterViewModel _previouspresenter;
         public void OpenItem(ServerItem item)
         {
-            if(_core.TryGetUiManager(out IUiManager _uiManager))
+            if (_core.TryGetUiManager(out IUiManager _uiManager))
             {
                 _uiManager.HideKeyboard();
                 //_uiManager.HidePopup(_previouspresenter);

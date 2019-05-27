@@ -98,8 +98,8 @@
     <Reference Include="Panacea.Modularity.WebBrowsing, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Panacea.Modularity.WebBrowsing.3.0.0\lib\net462\Panacea.Modularity.WebBrowsing.dll</HintPath>
     </Reference>
-    <Reference Include="Panacea.Multilinguality, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Panacea.Multilinguality.1.0.0\lib\net462\Panacea.Multilinguality.dll</HintPath>
+    <Reference Include="Panacea.Multilinguality, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Panacea.Multilinguality.1.0.1\lib\net462\Panacea.Multilinguality.dll</HintPath>
     </Reference>
     <Reference Include="Panacea.Mvvm, Version=0.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Panacea.Mvvm.0.0.1\lib\net462\Panacea.Mvvm.dll</HintPath>
