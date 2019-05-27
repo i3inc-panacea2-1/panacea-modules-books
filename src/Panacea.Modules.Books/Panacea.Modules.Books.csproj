@@ -68,8 +68,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Panacea.ContentControls, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Panacea.ContentControls.2.0.1\lib\net462\Panacea.ContentControls.dll</HintPath>
+    <Reference Include="Panacea.ContentControls, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Panacea.ContentControls.2.0.3\lib\net462\Panacea.ContentControls.dll</HintPath>
     </Reference>
     <Reference Include="Panacea.Controls, Version=0.0.27.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Panacea.Controls.0.0.27-beta20190524-1517-g8a25a53\lib\net462\Panacea.Controls.dll</HintPath>
