@@ -14,7 +14,7 @@ using System.Text;
 namespace Panacea.Modules.Books.ViewModels
 {
     [View(typeof(AudioChaptersPresenter))]
-    public class AudioChaptersPresenterViewModel : ViewModelBase
+    public class AudioChaptersPresenterViewModel : PopupViewModelBase<object>
     {
         private readonly PanaceaServices _core;
         List<AudioBookChapter> _audioChapters;
@@ -35,8 +35,8 @@ namespace Panacea.Modules.Books.ViewModels
             _audioChapters = audioChapters;
             PlayCommand = new RelayCommand((arg) =>
             {
+                taskCompletionSource.SetResult(null);
                 if (_core.TryGetUiManager(out IUiManager uiManager) && _core.TryGetMediaPlayerContainer(out IMediaPlayerContainer mediaPlayerContainer)) {
-                    uiManager.HidePopup(this);
                     var chapter = arg as AudioBookChapter;
                     var url = _core.HttpClient.RelativeToAbsoluteUri(chapter.Url);
                     mediaPlayerContainer.Play(
@@ -58,7 +58,7 @@ namespace Panacea.Modules.Books.ViewModels
                     {
                         msg = "media player container not loaded";
                     }
-                    _core.Logger.Warn(this, msg);                    
+                    _core.Logger.Warn(this, msg);
                 }
             });
         }

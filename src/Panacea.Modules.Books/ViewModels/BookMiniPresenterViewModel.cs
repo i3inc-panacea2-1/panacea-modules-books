@@ -1,5 +1,7 @@
 ﻿using Panacea.Controls;
 using Panacea.Core;
+using Panacea.Modularity.UiManager;
+using Panacea.Modularity.WebBrowsing;
 using Panacea.Modules.Books.Models;
 using Panacea.Modules.Books.Views;
 using Panacea.Mvvm;
@@ -8,12 +10,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Input;
 
 namespace Panacea.Modules.Books.ViewModels
 {
     [View(typeof(BookMiniPresenter))]
-    public class BookMiniPresenterViewModel : ViewModelBase
+    public class BookMiniPresenterViewModel : PopupViewModelBase<object>
     {
         private readonly PanaceaServices _core;
         BooksPlugin _plugin;
@@ -28,19 +31,46 @@ namespace Panacea.Modules.Books.ViewModels
             if (book != null)
             {
                 Book = book;
+                SetupCommands();
                 //UnloadedCommand = new RelayCommand(args => sendEmptyCommands());
             }
+        }
+        protected void SetupCommands()
+        {
+            var canRead = CanRead();
+            ReadBookCommand = new RelayCommand(ReadBook, (arg) => canRead);
+
+            var canGo = CanGo();
+            GoToBookCommand = new RelayCommand(GoToBook, (arg) => canGo);
+
+            var canListen = CanListen();
+            ListenToBookCommand = new RelayCommand(ListenToBook, (arg) => canListen);
+
+            CloseCommand = new RelayCommand(Close);
+        }
+        protected void Close(object arg)
+        {
+            IsOpen = false;
+            _plugin.ListenToBook(Book);
+            taskCompletionSource.SetResult(null);
         }
         protected void ListenToBook(object arg)
         {
             IsOpen = false;
             _plugin.ListenToBook(Book);
+            taskCompletionSource.SetResult(null);
         }
-
         protected void ReadBook(object arg)
         {
             IsOpen = false;
             _plugin.ReadBook(Book);
+            taskCompletionSource.SetResult(null);
+        }
+        protected void GoToBook(object arg)
+        {
+            IsOpen = false;
+            _plugin.GoToBook(Book);
+            taskCompletionSource.SetResult(null);
         }
         protected bool CanGo()
         {
@@ -112,10 +142,15 @@ namespace Panacea.Modules.Books.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        public ICommand CloseCommand { get; protected set; }
-        public ICommand LoadedCommand { get; protected set; }
-        //public ICommand UnloadedCommand { get; protected set; }
-
+        ICommand _closeCommand;
+        public ICommand CloseCommand
+        {
+            get => _closeCommand;
+            protected set
+            {
+                _closeCommand = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

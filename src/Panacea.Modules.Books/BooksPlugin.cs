@@ -17,11 +17,13 @@ using Panacea.Modules.Books.Views;
 using Panacea.Core.Extensions;
 using System.Web;
 using System.Windows;
+using Panacea.Multilinguality;
 
 namespace Panacea.Modules.Books
 {
     public class BooksPlugin : ICallablePlugin //TODO: ,IHasFavorites in modularity?
     {
+        readonly Translator _translator;
         readonly PanaceaServices _core;
         readonly BooksProvider _provider;
         public BooksProvider Provider
@@ -32,6 +34,7 @@ namespace Panacea.Modules.Books
         public BooksPlugin(PanaceaServices core)
         {
             _core = core;
+            _translator = new Translator("Books");
             _provider = new BooksProvider(core);
         }
         public List<ServerItem> Favorites { get; set; }
@@ -71,9 +74,9 @@ namespace Panacea.Modules.Books
             {
                 List<AudioBookChapter> convertedChapters = urls.Where(u => u.Url != null).Select(du => new AudioBookChapter { Url = du.Url }).ToList();
                 var acp = new AudioChaptersPresenterViewModel(_core, convertedChapters);
-                if (_core.TryGetUiManager(out IUiManager _mediaContainer))
+                if (_core.TryGetUiManager(out IUiManager _uiManager))
                 {
-                   _mediaContainer.ShowPopup(acp, "", PopupType.None);
+                    _uiManager.ShowPopup(acp, "", PopupType.None);
                 }
                 else
                 {
@@ -84,10 +87,16 @@ namespace Panacea.Modules.Books
 
         async public void ReadBook(Book book)
         {
-            if(_core.TryGetBilling(out IBillingManager _billing)){
-                if (!await _billing.ConsumeItemOrRequestServiceAsync("This Book requires service.", "Books", book))
+            if (_core.TryGetBilling(out IBillingManager _billing)) {
+                if (!_billing.IsPluginFree("Books"))
                 {
-                    return;
+                    string msg = "This Book requires service.";
+                    //TODO TRANSLATOR: var t = _translator.Translate(msg);
+                    var s = await _billing.GetServiceForItemAsync(msg, "Books", book);
+                    if (s == null)
+                    {
+                        return;
+                    }
                 }
             }
             if (book != null)
@@ -103,7 +112,7 @@ namespace Panacea.Modules.Books
         public void GoToBook(Book book)
         {
             if(_core.TryGetWebBrowser(out IWebBrowserPlugin _webBrowser)){
-                _webBrowser.OpenUnmanaged(HttpUtility.UrlEncode(book.DataUrl.Where(du => du.DataType == "url").First().Url));
+                _webBrowser.OpenUnmanaged(book.DataUrl.Where(du => du.DataType == "url").First().Url);
             } else
             {
                 _core.Logger.Warn(this, "web browser not loaded");
@@ -116,7 +125,7 @@ namespace Panacea.Modules.Books
             if(_core.TryGetUiManager(out IUiManager _uiManager))
             {
                 _uiManager.HideKeyboard();
-                _uiManager.HidePopup(_previouspresenter);
+                //_uiManager.HidePopup(_previouspresenter);
                 var bmp = new BookMiniPresenterViewModel(_core, this, item as Book);
                 _previouspresenter = bmp;
                 _uiManager.ShowPopup(bmp, "", PopupType.None);
@@ -131,14 +140,14 @@ namespace Panacea.Modules.Books
                 switch (extension)
                 {
                     case "epub":
-                        _webBrowser.OpenUnmanaged(HttpUtility.UrlEncode(_core.HttpClient.RelativeToAbsoluteUri("/static/epub/index.html?c=") + _core.HttpClient.RelativeToAbsoluteUri(url)));
+                        _webBrowser.OpenUnmanaged(_core.HttpClient.RelativeToAbsoluteUri("/static/epub/index.html?c=") + _core.HttpClient.RelativeToAbsoluteUri(url));
                         break;
                     case "html":
                     case "htm":
 
                         break;
                     case "pdf":
-                        _webBrowser.OpenUnmanaged(HttpUtility.UrlEncode(_core.HttpClient.RelativeToAbsoluteUri("/static/pdf/web/viewer.html?file=") + _core.HttpClient.RelativeToAbsoluteUri(url)));
+                        _webBrowser.OpenUnmanaged(_core.HttpClient.RelativeToAbsoluteUri("/static/pdf/web/viewer.html?file=") + _core.HttpClient.RelativeToAbsoluteUri(url));
                         break;
                 }
             }
