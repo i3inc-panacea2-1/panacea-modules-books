@@ -37,7 +37,8 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Margin="10" VerticalAlignment="Stretch">
+    <Grid Margin="10" VerticalAlignment="Stretch"
+          panaceaCtrl:Material.RelativeFontSizeRatio="1.0">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition />
@@ -47,7 +48,7 @@
         <TextBlock
             Grid.Row="0"
             Margin="8"
-            FontSize="{DynamicResource FontSize-Xxx-Large}"
+            panaceaCtrl:Material.RelativeFontSizeRatio="1.4"
             Text="{Binding Book.Name}"
             TextAlignment="Center"
             TextWrapping="Wrap" />
@@ -166,24 +167,21 @@
                 Command="{Binding ReadBookCommand}"
                 Content="{multilinguality:Translate 'Read book',
                                                     'Books'}"
-                FontSize="{DynamicResource FontSize-Normal}"
                 Style="{DynamicResource PrimaryButton}"
-                panaceaCtrl:Material.Icon="ic_library_books"
+                panaceaCtrl:Material.Icon="library_books"
                 Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource BoolToVisibility}}" />
             <Button
-                panaceaCtrl:Material.Icon="ic_voice_chat"
+                panaceaCtrl:Material.Icon="voice_chat"
                 Command="{Binding ListenToBookCommand}"
                 Content="{multilinguality:Translate 'Listen to book',
                                                     'Books'}"
-                FontSize="{DynamicResource FontSize-Normal}"
                 Style="{DynamicResource PrimaryButton}"
                 Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource BoolToVisibility}}" />
             <Button
-                panaceaCtrl:Material.Icon="ic_web"
+                panaceaCtrl:Material.Icon="web"
                 Command="{Binding GoToBookCommand}"
                 Content="{multilinguality:Translate 'Go to book',
                                                     'Books'}"
-                FontSize="{DynamicResource FontSize-Normal}"
                 Style="{DynamicResource PrimaryButton}"
                 Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource BoolToVisibility}}" />
 

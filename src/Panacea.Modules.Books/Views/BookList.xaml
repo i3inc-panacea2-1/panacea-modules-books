@@ -41,7 +41,8 @@
                         </Grid.RowDefinitions>
                         <Grid
                             Grid.Row="1"
-                            VerticalAlignment="Bottom">
+                            VerticalAlignment="Bottom"
+                            pcontrols:Material.RelativeFontSizeRatio="1.0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="Auto"/>
@@ -49,7 +50,7 @@
                             <Button
                                 Style="{DynamicResource PrimaryButton}"
                                 Background="#B0B09E"
-                                pcontrols:Material.Icon="ic_info"
+                                pcontrols:Material.Icon="info"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=local:BookList}, Path=DataContext.InfoClickCommand}"
                                 CommandParameter="{Binding}"
                                 Content="{multilinguality:Translate 'Info',
@@ -60,7 +61,7 @@
                                 Style="{DynamicResource PrimaryButton}"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=local:BookList}, Path=DataContext.FavoriteCommand}"
                                 CommandParameter="{Binding}"
-                                pcontrols:Material.Icon="ic_favorite"
+                                pcontrols:Material.Icon="favorite"
                                 >
                                 <Button.Background>
                                     <MultiBinding Converter="{StaticResource bcc}">
