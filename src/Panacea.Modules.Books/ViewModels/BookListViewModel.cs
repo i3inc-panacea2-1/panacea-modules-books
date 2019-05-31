@@ -23,20 +23,20 @@ namespace Panacea.Modules.Books.ViewModels
             _plugin = plugin;
             _core = core;
             Provider = plugin.Provider;
-            ItemClickCommand = new RelayCommand((arg) =>
+            ItemClickCommand = new RelayCommand(async arg =>
             {
                 if (plugin == null) return;
                 if ((arg as Book).DataUrl.Any((du) => du.DataType == "file"))
                 {
-                    plugin.ReadBook(arg as Book);
+                    await plugin.ReadBookAsync(arg as Book);
                 }
                 else if ((arg as Book).DataUrl.Any((du) => du.DataType == "audio"))
                 {
-                    plugin.ListenToBook(arg as Book);
+                    await plugin.ListenToBookAsync(arg as Book);
                 }
                 else if ((arg as Book).DataUrl.Any((du) => du.DataType == "url"))
                 {
-                    plugin.GoToBook(arg as Book);
+                    await plugin.GoToBookAsync(arg as Book);
                 }
             });
             InfoClickCommand = new RelayCommand((arg) =>

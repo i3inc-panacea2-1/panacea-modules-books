@@ -45,32 +45,21 @@ namespace Panacea.Modules.Books.ViewModels
 
             var canListen = CanListen();
             ListenToBookCommand = new RelayCommand(ListenToBook, (arg) => canListen);
-
-            CloseCommand = new RelayCommand(Close);
         }
-        protected void Close(object arg)
+        async void ListenToBook(object arg)
         {
-            IsOpen = false;
-            _plugin.ListenToBook(Book);
-            taskCompletionSource.SetResult(null);
+            SetResult(null);
+            await _plugin.ListenToBookAsync(Book);
         }
-        protected void ListenToBook(object arg)
+        async void ReadBook(object arg)
         {
-            IsOpen = false;
-            _plugin.ListenToBook(Book);
-            taskCompletionSource.SetResult(null);
+            SetResult(null);
+            await _plugin.ReadBookAsync(Book);
         }
-        protected void ReadBook(object arg)
+        async void GoToBook(object arg)
         {
-            IsOpen = false;
-            _plugin.ReadBook(Book);
-            taskCompletionSource.SetResult(null);
-        }
-        protected void GoToBook(object arg)
-        {
-            IsOpen = false;
-            _plugin.GoToBook(Book);
-            taskCompletionSource.SetResult(null);
+            SetResult(null);
+            await _plugin.GoToBookAsync(Book);
         }
         protected bool CanGo()
         {
@@ -96,17 +85,6 @@ namespace Panacea.Modules.Books.ViewModels
             set
             {
                 _book = value;
-                OnPropertyChanged();
-            }
-        }
-
-        bool _isOpen = true;
-        public bool IsOpen
-        {
-            get => _isOpen;
-            protected set
-            {
-                _isOpen = value;
                 OnPropertyChanged();
             }
         }

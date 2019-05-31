@@ -18,10 +18,11 @@ using Panacea.Core.Extensions;
 using System.Web;
 using System.Windows;
 using Panacea.Multilinguality;
+using Panacea.Modularity.Favorites;
 
 namespace Panacea.Modules.Books
 {
-    public class BooksPlugin : ICallablePlugin //TODO: ,IHasFavorites in modularity?
+    public class BooksPlugin : ICallablePlugin, IHasFavoritesPlugin
     {
         readonly Translator _translator = new Translator("Books");
         readonly PanaceaServices _core;
@@ -48,74 +49,87 @@ namespace Panacea.Modules.Books
             return Task.CompletedTask;
         }
 
-        public void ListenToBook(Book book)
+        public async Task ListenToBookAsync(Book book)
         {
-            var urls = book.DataUrl.Where(du => du.DataType == "audio").ToList();
-            if (urls.Count == 1)
+            if(await CheckForServiceAsync(book))
             {
-                var url = _core.HttpClient.RelativeToAbsoluteUri(urls[0].Url);
-                if (_core.TryGetMediaPlayerContainer(out IMediaPlayerContainer _mediaContainer))
+                var urls = book.DataUrl.Where(du => du.DataType == "audio").ToList();
+                if (urls.Count == 1)
                 {
-                    _mediaContainer.Play(new MediaRequest(new IptvMedia() { URL = url, Name = book.Name })
+                    var url = _core.HttpClient.RelativeToAbsoluteUri(urls[0].Url);
+                    if (_core.TryGetMediaPlayerContainer(out IMediaPlayerContainer _mediaContainer))
                     {
-                        FullscreenMode = FullscreenMode.NoFullscreen,
-                        ShowVideo = false,
-                        AllowPip = false,
-                        MediaPlayerPosition = MediaPlayerPosition.Notification
-                    });
+                        _mediaContainer.Play(new MediaRequest(new IptvMedia() { URL = url, Name = book.Name })
+                        {
+                            FullscreenMode = FullscreenMode.NoFullscreen,
+                            ShowVideo = false,
+                            AllowPip = false,
+                            MediaPlayerPosition = MediaPlayerPosition.Notification
+                        });
+                    }
+                    else
+                    {
+                        _core.Logger.Warn(this, "media player container not loaded");
+                    }
                 }
                 else
                 {
-                    _core.Logger.Warn(this, "media player container not loaded");
-                }
-            }
-            else
-            {
-                List<AudioBookChapter> convertedChapters = urls.Where(u => u.Url != null).Select(du => new AudioBookChapter { Url = du.Url }).ToList();
-                var acp = new AudioChaptersPresenterViewModel(_core, convertedChapters);
-                if (_core.TryGetUiManager(out IUiManager _uiManager))
-                {
-                    _uiManager.ShowPopup(acp, "", PopupType.None);
-                }
-                else
-                {
-                    _core.Logger.Warn(this, "ui manager not loaded");
+                    List<AudioBookChapter> convertedChapters = urls.Where(u => u.Url != null).Select(du => new AudioBookChapter { Url = du.Url }).ToList();
+                    var acp = new AudioChaptersPresenterViewModel(_core, convertedChapters);
+                    if (_core.TryGetUiManager(out IUiManager _uiManager))
+                    {
+                        await _uiManager.ShowPopup(acp, "", PopupType.None);
+                    }
+                    else
+                    {
+                        _core.Logger.Warn(this, "ui manager not loaded");
+                    }
                 }
             }
         }
 
-        async public void ReadBook(Book book)
+        private async Task<bool> CheckForServiceAsync(Book book)
         {
             if (_core.TryGetBilling(out IBillingManager _billing))
             {
                 if (!_billing.IsPluginFree("Books"))
                 {
-                    var s = await _billing.GetServiceForItemAsync(_translator.Translate("This Book requires service."), "Books", book);
-                    if (s == null)
+                    var service = await _billing.GetServiceForItemAsync(_translator.Translate("This Book requires service."), "Books", book);
+                    if (service == null)
                     {
-                        return;
+                        return false;
                     }
                 }
             }
-            if (book != null)
+            return true;
+        }
+        public async Task ReadBookAsync(Book book)
+        {
+            if (await CheckForServiceAsync(book))
             {
-                //TODO: WS: _websocket.PopularNotify("Books", "Book", book.Id);
-                var durl = book.DataUrl.FirstOrDefault(d => d?.DataType == "file");
-                if (durl == null || string.IsNullOrEmpty(durl.Url)) return;
-                var url = _core.HttpClient.RelativeToAbsoluteUri(durl.Url);
-                OpenItem(book, url);
+                if (book != null)
+                {
+                    //TODO: WS: _websocket.PopularNotify("Books", "Book", book.Id);
+                    var durl = book.DataUrl.FirstOrDefault(d => d?.DataType == "file");
+                    if (durl == null || string.IsNullOrEmpty(durl.Url)) return;
+                    var url = _core.HttpClient.RelativeToAbsoluteUri(durl.Url);
+                    await OpenItemAsync(book, url);
+                }
             }
         }
 
-        public void GoToBook(Book book)
+        public async Task GoToBookAsync(Book book)
         {
-            if (_core.TryGetWebBrowser(out IWebBrowserPlugin _webBrowser))
+            if(await CheckForServiceAsync(book))
             {
-                _webBrowser.OpenUnmanaged(book.DataUrl.Where(du => du.DataType == "url").First().Url);
-            }
-            else
-            {
-                _core.Logger.Warn(this, "web browser not loaded");
+                if (_core.TryGetWebBrowser(out IWebBrowserPlugin _webBrowser))
+                {
+                    _webBrowser.OpenUnmanaged(book.DataUrl.Where(du => du.DataType == "url").First().Url);
+                }
+                else
+                {
+                    _core.Logger.Warn(this, "web browser not loaded");
+                }
             }
         }
 
@@ -132,23 +146,25 @@ namespace Panacea.Modules.Books
             }
         }
 
-        public void OpenItem(ServerItem item, string url)
+        public async Task OpenItemAsync(ServerItem item, string url)
         {
-            var extension = GetExtension(url);
-            if (_core.TryGetWebBrowser(out IWebBrowserPlugin _webBrowser))
-            {
-                switch (extension)
+            if (await CheckForServiceAsync(item as Book)){
+                var extension = GetExtension(url);
+                if (_core.TryGetWebBrowser(out IWebBrowserPlugin _webBrowser))
                 {
-                    case "epub":
-                        _webBrowser.OpenUnmanaged(_core.HttpClient.RelativeToAbsoluteUri("/static/epub/index.html?c=") + _core.HttpClient.RelativeToAbsoluteUri(url));
-                        break;
-                    case "html":
-                    case "htm":
+                    switch (extension)
+                    {
+                        case "epub":
+                            _webBrowser.OpenUnmanaged(_core.HttpClient.RelativeToAbsoluteUri("/static/epub/index.html?c=") + _core.HttpClient.RelativeToAbsoluteUri(url));
+                            break;
+                        case "html":
+                        case "htm":
 
-                        break;
-                    case "pdf":
-                        _webBrowser.OpenUnmanaged(_core.HttpClient.RelativeToAbsoluteUri("/static/pdf/web/viewer.html?file=") + _core.HttpClient.RelativeToAbsoluteUri(url));
-                        break;
+                            break;
+                        case "pdf":
+                            _webBrowser.OpenUnmanaged(_core.HttpClient.RelativeToAbsoluteUri("/static/pdf/web/viewer.html?file=") + _core.HttpClient.RelativeToAbsoluteUri(url));
+                            break;
+                    }
                 }
             }
         }

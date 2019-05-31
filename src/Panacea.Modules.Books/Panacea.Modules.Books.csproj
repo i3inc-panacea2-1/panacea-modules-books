@@ -158,6 +158,9 @@
     <PackageReference Include="Panacea.Modularity.Billing">
       <Version>3.0.2</Version>
     </PackageReference>
+    <PackageReference Include="Panacea.Modularity.Favorites">
+      <Version>0.0.1</Version>
+    </PackageReference>
     <PackageReference Include="Panacea.Modularity.Media">
       <Version>3.0.3</Version>
     </PackageReference>
