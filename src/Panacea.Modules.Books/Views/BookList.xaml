@@ -1,18 +1,19 @@
-﻿<UserControl 
+﻿<UserControl
     x:Class="Panacea.Modules.Books.Views.BookList"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:viewModels="clr-namespace:Panacea.Modules.Books.ViewModels"
-    xmlns:pcontrols="clr-namespace:Panacea.Controls;assembly=Panacea.Controls"
-    xmlns:local="clr-namespace:Panacea.Modules.Books.Views"
-    xmlns:contentCtrl="clr-namespace:Panacea.ContentControls;assembly=Panacea.ContentControls"
-    xmlns:multilinguality="clr-namespace:Panacea.Multilinguality;assembly=Panacea.Multilinguality"
     xmlns:books="clr-namespace:Panacea.Modules.Books"
     xmlns:booksViewModels="clr-namespace:Panacea.Modules.Books.ViewModels"
-    mc:Ignorable="d" 
-    d:DesignHeight="450" d:DesignWidth="800">
+    xmlns:contentCtrl="clr-namespace:Panacea.ContentControls;assembly=Panacea.ContentControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Panacea.Modules.Books.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:multilinguality="clr-namespace:Panacea.Multilinguality;assembly=Panacea.Multilinguality"
+    xmlns:pcontrols="clr-namespace:Panacea.Controls;assembly=Panacea.Controls"
+    xmlns:viewModels="clr-namespace:Panacea.Modules.Books.ViewModels"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <d:UserControl.DataContext>
         <x:Type Type="viewModels:BookMiniPresenterViewModel" />
     </d:UserControl.DataContext>
@@ -23,14 +24,11 @@
         <contentCtrl:LazyLoadingTabControl
             Title="{multilinguality:Translate 'Books',
                                               'Books'}"
-            
-            
-            OpenItemCommand="{Binding ItemClickCommand}"
-            
-            MaterialIcon="ic_book"
-            ItemProvider="{Binding Provider}"
-            Ratio="1.385"
             Columns="5"
+            ItemProvider="{Binding Provider}"
+            MaterialIcon="book"
+            OpenItemCommand="{Binding ItemClickCommand}"
+            Ratio="1.385"
             Color="#ff9100">
             <contentCtrl:LazyLoadingTabControl.ThumbnailExtraTemplate>
                 <DataTemplate>
@@ -44,25 +42,24 @@
                             VerticalAlignment="Bottom"
                             pcontrols:Material.RelativeFontSizeRatio="1.0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Button
-                                Style="{DynamicResource PrimaryButton}"
-                                Background="#B0B09E"
                                 pcontrols:Material.Icon="info"
+                                Background="#B0B09E"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=local:BookList}, Path=DataContext.InfoClickCommand}"
                                 CommandParameter="{Binding}"
                                 Content="{multilinguality:Translate 'Info',
-                                                                 'Books'}" />
+                                                                    'Books'}"
+                                Style="{DynamicResource PrimaryButton}" />
 
                             <Button
                                 Grid.Column="1"
-                                Style="{DynamicResource PrimaryButton}"
+                                pcontrols:Material.Icon="favorite"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=local:BookList}, Path=DataContext.FavoriteCommand}"
                                 CommandParameter="{Binding}"
-                                pcontrols:Material.Icon="favorite"
-                                >
+                                Style="{DynamicResource PrimaryButton}">
                                 <Button.Background>
                                     <MultiBinding Converter="{StaticResource bcc}">
                                         <Binding Path="DataContext.IsFavoriteCommand" RelativeSource="{RelativeSource AncestorType=local:BookList}" />

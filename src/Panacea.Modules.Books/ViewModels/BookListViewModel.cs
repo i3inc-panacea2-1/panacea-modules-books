@@ -23,26 +23,30 @@ namespace Panacea.Modules.Books.ViewModels
             _plugin = plugin;
             _core = core;
             Provider = plugin.Provider;
+            SetupCommands();
+        }
+        void SetupCommands()
+        {
             ItemClickCommand = new RelayCommand(async arg =>
             {
-                if (plugin == null) return;
+                if (_plugin == null) return;
                 if ((arg as Book).DataUrl.Any((du) => du.DataType == "file"))
                 {
-                    await plugin.ReadBookAsync(arg as Book);
+                    await _plugin.ReadBookAsync(arg as Book);
                 }
                 else if ((arg as Book).DataUrl.Any((du) => du.DataType == "audio"))
                 {
-                    await plugin.ListenToBookAsync(arg as Book);
+                    await _plugin.ListenToBookAsync(arg as Book);
                 }
                 else if ((arg as Book).DataUrl.Any((du) => du.DataType == "url"))
                 {
-                    await plugin.GoToBookAsync(arg as Book);
+                    await _plugin.GoToBookAsync(arg as Book);
                 }
             });
             InfoClickCommand = new RelayCommand((arg) =>
             {
-                if (plugin == null) return;
-                plugin.OpenItem(arg as Book);
+                if (_plugin == null) return;
+                _plugin.OpenItem(arg as Book);
             });
 
             //TODO: WhenFavorites
@@ -92,7 +96,6 @@ namespace Panacea.Modules.Books.ViewModels
             //    }
             //});
         }
-
         public ICommand ItemClickCommand { get; private set; }
         public ICommand InfoClickCommand { get; protected set; }
         public ICommand FavoriteCommand { get; protected set; }

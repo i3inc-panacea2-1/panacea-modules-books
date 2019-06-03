@@ -51,8 +51,10 @@ namespace Panacea.Modules.Books
 
         public async Task ListenToBookAsync(Book book)
         {
-            if(await CheckForServiceAsync(book))
+            if (await CheckForServiceAsync(book))
             {
+                if (book != null)
+                    _core.WebSocket.PopularNotify("Books", "Book", book.Id, _core.UserService.User?.Id ?? "0");
                 var urls = book.DataUrl.Where(du => du.DataType == "audio").ToList();
                 if (urls.Count == 1)
                 {
@@ -109,7 +111,7 @@ namespace Panacea.Modules.Books
             {
                 if (book != null)
                 {
-                    //TODO: WS: _websocket.PopularNotify("Books", "Book", book.Id);
+                    _core.WebSocket.PopularNotify("Books", "Book", book.Id, _core.UserService.User?.Id ?? "0");
                     var durl = book.DataUrl.FirstOrDefault(d => d?.DataType == "file");
                     if (durl == null || string.IsNullOrEmpty(durl.Url)) return;
                     var url = _core.HttpClient.RelativeToAbsoluteUri(durl.Url);
@@ -122,6 +124,8 @@ namespace Panacea.Modules.Books
         {
             if(await CheckForServiceAsync(book))
             {
+                if (book != null)
+                    _core.WebSocket.PopularNotify("Books", "Book", book.Id, _core.UserService.User?.Id ?? "0");
                 if (_core.TryGetWebBrowser(out IWebBrowserPlugin _webBrowser))
                 {
                     _webBrowser.OpenUnmanaged(book.DataUrl.Where(du => du.DataType == "url").First().Url);

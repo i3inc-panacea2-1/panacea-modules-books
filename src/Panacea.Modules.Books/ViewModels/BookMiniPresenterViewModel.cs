@@ -20,7 +20,16 @@ namespace Panacea.Modules.Books.ViewModels
     {
         private readonly PanaceaServices _core;
         BooksPlugin _plugin;
-
+        Book _book;
+        public Book Book
+        {
+            get => _book;
+            set
+            {
+                _book = value;
+                OnPropertyChanged();
+            }
+        }
         public BookMiniPresenterViewModel(
             PanaceaServices core,
             BooksPlugin plugin,
@@ -76,17 +85,6 @@ namespace Panacea.Modules.Books.ViewModels
         {
             if (Book == null) return false;
             return Book.DataUrl.Any((du) => du.DataType == "audio");
-        }
-
-        Book _book;
-        public Book Book
-        {
-            get => _book;
-            set
-            {
-                _book = value;
-                OnPropertyChanged();
-            }
         }
 
         ICommand _readBookCommand;
