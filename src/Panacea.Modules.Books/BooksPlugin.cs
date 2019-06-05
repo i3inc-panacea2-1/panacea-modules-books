@@ -197,5 +197,10 @@ namespace Panacea.Modules.Books
                 ui.Navigate(bookListViewModel);
             }
         }
+
+        public Type GetContentType()
+        {
+            return typeof(Book);
+        }
     }
 }
