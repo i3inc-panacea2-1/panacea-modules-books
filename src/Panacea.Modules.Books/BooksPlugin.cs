@@ -19,10 +19,11 @@ using System.Web;
 using System.Windows;
 using Panacea.Multilinguality;
 using Panacea.Modularity.Favorites;
+using Panacea.Modularity.Content;
 
 namespace Panacea.Modules.Books
 {
-    public class BooksPlugin : ICallablePlugin, IHasFavoritesPlugin
+    public class BooksPlugin : ICallablePlugin, IHasFavoritesPlugin, IContentPlugin
     {
         readonly Translator _translator = new Translator("Books");
         readonly PanaceaServices _core;
@@ -196,11 +197,18 @@ namespace Panacea.Modules.Books
                 var bookListViewModel = new BookListViewModel(_core, this);
                 ui.Navigate(bookListViewModel);
             }
+            _core.WebSocket.PopularNotifyPage("Books");
         }
 
         public Type GetContentType()
         {
             return typeof(Book);
+        }
+
+        public Task OpenItemAsync(ServerItem item)
+        {
+            OpenItem(item);
+            return Task.CompletedTask;
         }
     }
 }

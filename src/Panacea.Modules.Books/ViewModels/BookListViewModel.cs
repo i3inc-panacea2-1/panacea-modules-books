@@ -60,7 +60,7 @@ namespace Panacea.Modules.Books.ViewModels
                 return _plugin.Favorites.Any(mm => mm.Id == book.Id);
             });
 
-            FavoriteCommand = new RelayCommand((args) =>
+            FavoriteCommand = new RelayCommand(async (args) =>
             {
                 var book = args as Book;
                 if (book == null) return;
@@ -68,7 +68,8 @@ namespace Panacea.Modules.Books.ViewModels
                 {
                     try
                     {
-                        _favoritesManager.AddOrRemoveFavoriteAsync("Books", book);
+                        await _favoritesManager.AddOrRemoveFavoriteAsync("Books", book);
+                        OnPropertyChanged(nameof(IsFavoriteCommand));
                     }
                     catch (Exception e)
                     {
