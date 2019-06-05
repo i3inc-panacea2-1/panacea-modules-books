@@ -6,6 +6,7 @@
     xmlns:booksViewModels="clr-namespace:Panacea.Modules.Books.ViewModels"
     xmlns:contentCtrl="clr-namespace:Panacea.ContentControls;assembly=Panacea.ContentControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:favorites="clr-namespace:Panacea.Modularity.Favorites;assembly=Panacea.Modularity.Favorites"
     xmlns:local="clr-namespace:Panacea.Modules.Books.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:multilinguality="clr-namespace:Panacea.Multilinguality;assembly=Panacea.Multilinguality"
@@ -18,7 +19,7 @@
         <x:Type Type="viewModels:BookMiniPresenterViewModel" />
     </d:UserControl.DataContext>
     <UserControl.Resources>
-        <books:BoolToColorConverter x:Key="bcc" />
+        <favorites:BoolToFavoriteConverter x:Key="bcc" />
     </UserControl.Resources>
     <Grid Name="RootLayout">
         <contentCtrl:LazyLoadingTabControl
@@ -56,8 +57,8 @@
 
                             <Button
                                 Grid.Column="1"
+                                pcontrols:Material.AsyncCommand="{Binding RelativeSource={RelativeSource AncestorType=local:BookList}, Path=DataContext.FavoriteCommand}"
                                 pcontrols:Material.Icon="favorite"
-                                Command="{Binding RelativeSource={RelativeSource AncestorType=local:BookList}, Path=DataContext.FavoriteCommand}"
                                 CommandParameter="{Binding}"
                                 Style="{DynamicResource PrimaryButton}">
                                 <Button.Background>
