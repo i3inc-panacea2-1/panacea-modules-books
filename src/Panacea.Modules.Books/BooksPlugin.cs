@@ -97,7 +97,7 @@ namespace Panacea.Modules.Books
             {
                 if (!_billing.IsPluginFree("Books"))
                 {
-                    var service = await _billing.GetServiceForItemAsync(_translator.Translate("This Book requires service."), "Books", book);
+                    var service = await _billing.GetOrRequestServiceForItemAsync(_translator.Translate("This Book requires service."), "Books", book);
                     if (service == null)
                     {
                         return false;
