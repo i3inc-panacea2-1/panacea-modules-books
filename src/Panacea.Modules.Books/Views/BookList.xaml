@@ -41,7 +41,7 @@
                         <Grid
                             Grid.Row="1"
                             VerticalAlignment="Bottom"
-                            pcontrols:Material.RelativeFontSizeRatio="1.0">
+                            TextElement.FontSize="{DynamicResource FontSize-Normal}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="Auto" />

@@ -41,7 +41,7 @@
     <Grid
         Margin="10"
         VerticalAlignment="Stretch"
-        panaceaCtrl:Material.RelativeFontSizeRatio="1.0">
+        TextElement.FontSize="{DynamicResource FontSize-Normal}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition />
@@ -51,7 +51,7 @@
         <TextBlock
             Grid.Row="0"
             Margin="8"
-            panaceaCtrl:Material.RelativeFontSizeRatio="1.4"
+            FontSize="{DynamicResource FontSize-Xx-Large}"
             Text="{Binding Book.Name}"
             TextAlignment="Center"
             TextWrapping="Wrap" />
