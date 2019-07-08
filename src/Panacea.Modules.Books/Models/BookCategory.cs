@@ -1,4 +1,5 @@
 ﻿using Panacea.Models;
+using Panacea.Modularity.Books.Models;
 using Panacea.Multilinguality;
 using System;
 using System.Collections.Generic;

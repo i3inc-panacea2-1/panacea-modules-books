@@ -10,6 +10,7 @@ using Panacea.Modularity.MediaPlayerContainer;
 using System.Windows.Input;
 using Panacea.Modularity.Media.Channels;
 using System.Text;
+using Panacea.Modularity.Books.Models;
 
 namespace Panacea.Modules.Books.ViewModels
 {

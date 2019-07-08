@@ -1,6 +1,7 @@
 ﻿using Panacea.Controls;
 using Panacea.Core;
 using Panacea.Models;
+using Panacea.Modularity.Books.Models;
 using Panacea.Modularity.Favorites;
 using Panacea.Modules.Books.Models;
 using Panacea.Modules.Books.Views;

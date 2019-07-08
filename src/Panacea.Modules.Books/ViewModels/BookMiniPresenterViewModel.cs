@@ -1,5 +1,6 @@
 ﻿using Panacea.Controls;
 using Panacea.Core;
+using Panacea.Modularity.Books.Models;
 using Panacea.Modularity.UiManager;
 using Panacea.Modularity.WebBrowsing;
 using Panacea.Modules.Books.Models;

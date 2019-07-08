@@ -25,6 +25,7 @@
         <contentCtrl:LazyLoadingTabControl
             Title="{multilinguality:Translate 'Books',
                                               'Books'}"
+            NoItemsText="{multilinguality:Translate 'No books found', 'Books'}"
             Columns="5"
             ItemProvider="{Binding Provider}"
             MaterialIcon="book"

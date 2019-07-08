@@ -20,10 +20,12 @@ using System.Windows;
 using Panacea.Multilinguality;
 using Panacea.Modularity.Favorites;
 using Panacea.Modularity.Content;
+using Panacea.Modularity.Books;
+using Panacea.Modularity.Books.Models;
 
 namespace Panacea.Modules.Books
 {
-    public class BooksPlugin : ICallablePlugin, IHasFavoritesPlugin, IContentPlugin
+    public class BooksPlugin : IBooksPlugin, ICallablePlugin, IHasFavoritesPlugin, IContentPlugin
     {
         readonly Translator _translator = new Translator("Books");
         readonly PanaceaServices _core;
@@ -202,6 +204,11 @@ namespace Panacea.Modules.Books
         {
             OpenItem(item);
             return Task.CompletedTask;
+        }
+
+        public void OpenBook(Book book, string pluginName)
+        {
+            OpenItemAsync(book);
         }
     }
 }

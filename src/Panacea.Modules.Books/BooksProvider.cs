@@ -1,6 +1,7 @@
 ﻿using Panacea.Modules.Books.Models;
 using Panacea.ContentControls;
 using Panacea.Core;
+using Panacea.Modularity.Books.Models;
 
 namespace Panacea.Modules.Books
 {
